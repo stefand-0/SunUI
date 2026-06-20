@@ -1,4 +1,6 @@
 local Element = require("sunui.core.element")
+local sdl = require("sunui.core.sdl")
+
 local Background = setmetatable({}, {__index = Element})
 Background.__index = Background
 
