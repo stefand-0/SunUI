@@ -46,3 +46,9 @@ return {
     RENDERER_ACCELERATED = 0x00000002,
     QUIT = 0x100
 }
+
+local lib_name = "SDL2"
+if ffi.os == "Windows" then lib_name = "SDL2.dll" end
+if ffi.os == "OSX" then lib_name = "libSDL2.dylib" end
+
+local SDL = ffi.load(lib_name)
