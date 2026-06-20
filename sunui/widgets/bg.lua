@@ -11,3 +11,16 @@ function Background:new(props)
     instance.border_width = props.border_width or 1 
     return instance
 end
+
+function Background:_draw_self(renderer, abs_x, abs_y)
+    -- Tell the GPU what color to paint with
+    SDL.SDL_SetRenderDrawColor(renderer, self.color[1], self.color[2], self.color[3], self.color[4])
+    
+    -- Allocate a temp C struct for the rect coordinates
+    local rect = ffi.new("SDL_Rect", { x = abs_x, y = abs_y, w = self.w, h = self.h })
+    
+    -- Draw it
+    SDL.SDL_RenderFillRect(renderer, rect)
+end
+
+return background
