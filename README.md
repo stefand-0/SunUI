@@ -17,8 +17,8 @@ LuaJIT
 
 SDL2 Runtime Binary (.dll):
 
-  1. Windows: Place sdl2.dll in your root folder
-  2. macOS / Linux: Ensure SDL2 is installed globally. 
+  1. Windows: Place `sdl2.dll` in your root folder
+  2. macOS / Linux: Ensure `SDL2` is installed globally. 
 
 # Getting Started
 
