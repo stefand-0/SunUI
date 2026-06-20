@@ -12,6 +12,7 @@ A simple UI framework for the Lua language.
 # Quick Start ☀️
 
 * Requirements
+
 LuaJIT
 
 SDL2 Runtime Binary (.dll):
