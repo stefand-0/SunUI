@@ -22,6 +22,25 @@ function Element:add(child)
   table.insert(self.children, child) 
 end
 
+function Element:is_point_inside(px, py)
+  -- absolute coords
+  return px >= self.x and px <= self.x + self.w and py >= self.y and py <= self.y + self.h
+end
+
+function Element:handle_click(mx, my)
+  for i = #self.children, 1, -1 do
+        local child = self.children[i]
+        if child:is_point_inside(mx, my) then
+            return child:handle_click(mx, my) -- The child handles it
+        end
+  end
+  if self.on_click then
+        self:on_click() -- If not child took the click, it handles it
+        return true
+  end
+  return false
+end
+
 -- To be overwritten by other widgets (specific)
 
 function Element:update(dt) end
