@@ -53,3 +53,9 @@ end
 -- Start the application lifecycle main thread loop
 SunUI:run(interactive_panel)
 ```
+
+• Run the app:
+Execute in the terminal using `LuaJIT`:
+```bash
+luajit main.lua
+```
