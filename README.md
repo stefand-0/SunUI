@@ -59,3 +59,6 @@ Execute in the terminal using `LuaJIT`:
 ```bash
 luajit main.lua
 ```
+
+# License ☀️ 
+This project is open-source and available under the Apache License Version 2.0
