@@ -1,49 +1,54 @@
--- 
+--
 local ffi = require("ffi")
-local sdl = require("sunui.core.sdl")
-local SDL = sdl.lib
 
-local SunUI = {}
+ffi.cdef[[
+    typedef struct SDL_Window SDL_Window;
+    typedef struct SDL_Renderer SDL_Renderer;
+    
+    typedef struct SDL_Rect { int x, y, w, h; } SDL_Rect;
 
-function SunUI:init(title, width, height)
-    if SDL.SDL_Init(sdl.INIT_VIDEO) < 0 then
-        error("Failed to initialize SDL video subsystem.")
-    end
+    // Expand the mappings so Lua can read exact coordinate fields
+    typedef struct SDL_MouseMotionEvent {
+        uint32_t type; uint32_t timestamp; uint32_t windowID; uint32_t which;
+        uint32_t state; int32_t x; int32_t y; int32_t xrel; int32_t yrel;
+    } SDL_MouseMotionEvent;
 
-    -- 0x2FFF0000 tells SDL to center the window automatically on screen
-    self.window = SDL.SDL_CreateWindow(title, 0x2FFF0000, 0x2FFF0000, width, height, sdl.WINDOW_SHOWN)
-    self.renderer = SDL.SDL_CreateRenderer(self.window, -1, sdl.RENDERER_ACCELERATED)
-    self.running = true
-    self.event = ffi.new("SDL_Event")
-end
+    typedef struct SDL_MouseButtonEvent {
+        uint32_t type; uint32_t timestamp; uint32_t windowID; uint32_t which;
+        uint8_t button; uint8_t state; uint8_t clicks; uint8_t padding1;
+        int32_t x; int32_t y;
+    } SDL_MouseButtonEvent;
 
-function SunUI:run(root_element)
-    while self.running do
-        -- Handle Events
-        while SDL.SDL_PollEvent(self.event) ~= 0 do
-            if self.event.type == sdl.QUIT then
-                self.running = false
-            end
-            -- root_element:handle_event(self.event)
-        end
+    typedef union SDL_Event {
+        uint32_t type;
+        SDL_MouseMotionEvent motion;
+        SDL_MouseButtonEvent button;
+        uint8_t padding[56];
+    } SDL_Event;
 
-        -- Clear Canvas
-        SDL.SDL_SetRenderDrawColor(self.renderer, 20, 22, 26, 255) -- canvas background
-        SDL.SDL_RenderClear(self.renderer)
+    int SDL_Init(uint32_t flags);
+    SDL_Window* SDL_CreateWindow(const char* title, int x, int y, int w, int h, uint32_t flags);
+    SDL_Renderer* SDL_CreateRenderer(SDL_Window* window, int index, uint32_t flags);
+    int SDL_SetRenderDrawColor(SDL_Renderer* renderer, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    int SDL_RenderClear(SDL_Renderer* renderer);
+    int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_Rect* rect);
+    void SDL_RenderPresent(SDL_Renderer* renderer);
+    int SDL_PollEvent(SDL_Event* event);
+    void SDL_DestroyRenderer(SDL_Renderer* renderer);
+    void SDL_DestroyWindow(SDL_Window* window);
+    void SDL_Quit(void);
+]]
 
-        -- Draw SunUI Tree (passing absolute offset 0,0 for the root wrapper)
-        if root_element then
-            root_element:draw(self.renderer, 0, 0)
-        end
-        -- Flip backbuffer
-        SDL.SDL_RenderPresent(self.renderer)
-    end
+local lib_name = ffi.os == "Windows" and "SDL2.dll" or (ffi.os == "OSX" and "libSDL2.dylib" or "libSDL2")
+local SDL = ffi.load(lib_name)
 
-    -- Cleanup when loop breaks
-    SDL.SDL_DestroyRenderer(self.renderer)
-    SDL.SDL_DestroyWindow(self.window)
-    SDL.SDL_Quit()
-end
-
-return SunUI
-
+return {
+    lib = SDL,
+    INIT_VIDEO = 0x00000020,
+    WINDOW_SHOWN = 0x00000004,
+    RENDERER_ACCELERATED = 0x00000002,
+    QUIT = 0x100,
+    MOUSEMOTION = 0x400,
+    MOUSEBUTTONDOWN = 0x401,
+    MOUSEBUTTONUP = 0x402
+}
