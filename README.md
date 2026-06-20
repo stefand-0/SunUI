@@ -9,4 +9,13 @@ A simple UI framework for the Lua language.
 
 ○ No need for external window managers, SDL handles it! 
 
+# Quick Start ☀️
+
+* Requirements
+LuaJIT
+
+SDL2 Runtime Binary (.dll):
+
+  1. Windows: Place sdl2.dll in your root folder
+  2. macOS / Linux: Ensure SDL2 is installed globally. 
 
