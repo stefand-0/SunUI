@@ -9,7 +9,10 @@ function SunUI:init(title, w, h)
         error("SDL Init Failed")
     end
     
-    -- Using 0x2FFF0000 (SDL_WINDOWPOS_UNDEFINED) ensures the X server places it correctly
+    if SDL.TTF_Init() < 0 then
+        error("TTF Init Failed")
+    end
+    
     self.window = SDL.SDL_CreateWindow(title, 0x2FFF0000, 0x2FFF0000, w, h, sdl.constants.WINDOW_SHOWN)
     if self.window == nil then error("Window creation failed") end
     
@@ -41,6 +44,7 @@ function SunUI:run(root_element)
     
     SDL.SDL_DestroyRenderer(self.renderer)
     SDL.SDL_DestroyWindow(self.window)
+    SDL.TTF_Quit()
     SDL.SDL_Quit()
 end
 
