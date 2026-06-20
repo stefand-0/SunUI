@@ -7,11 +7,9 @@ local Divider = setmetatable({}, {__index = Element})
 Divider.__index = Divider
 
 function Divider:new(props)
+    props.h = props.thickness or 2
     local instance = Element.new(self, props)
-    instance.vertical = props.vertical or false
-    instance.w = instance.vertical and (props.thickness or 2) or (props.w or 100)
-    instance.h = not instance.vertical and (props.thickness or 2) or (props.h or 100)
-    instance.color = props.color or {70, 75, 85, 255}
+    instance.color = props.color or {149, 165, 166, 255}
     return instance
 end
 
