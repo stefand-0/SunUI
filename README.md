@@ -33,7 +33,7 @@ SunUI:init("SunUI Application Workspace", 800, 600)
 -- Create an interactive panel element
 local interactive_panel = Background:new({
     x = 300, y = 220, w = 200, h = 160,
-    color = {70, 130, 180, 255} -- Initial Slate Blue
+    color = {70, 130, 180, 255} -- Slate Blue
 })
 
 -- Handle Hover & Mouse Interact States
@@ -42,7 +42,7 @@ function interactive_panel:on_mouseenter()
 end
 
 function interactive_panel:on_mouseleave()
-    self.color = {70, 130, 180, 255} -- Back to Base Blue
+    self.color = {70, 130, 180, 255} -- Back to Blue
 end
 
 function interactive_panel:on_click()
